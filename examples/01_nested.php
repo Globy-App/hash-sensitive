@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use HashSensitive\HashSensitiveProcessor;
+use GlobyApp\HashSensitive\HashSensitiveProcessor;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
