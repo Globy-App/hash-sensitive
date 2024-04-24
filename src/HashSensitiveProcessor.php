@@ -14,12 +14,15 @@ use UnexpectedValueException;
  */
 class HashSensitiveProcessor extends Hasher implements ProcessorInterface
 {
+    /**
+     * @var array<array-key, mixed> $sensitiveKeys
+     */
     private array $sensitiveKeys;
 
     /**
      * Creates a new HashSensitiveProcessor instance.
      *
-     * @param array $sensitiveKeys Keys that should trigger the redaction.
+     * @param array<array-key, mixed> $sensitiveKeys Keys that should trigger the redaction.
      * @param int|null $lengthLimit Max length after redaction.
      */
     public function __construct(array $sensitiveKeys, string $algorithm = 'sha256', ?int $lengthLimit = null, bool $exclusiveSubtree = true)

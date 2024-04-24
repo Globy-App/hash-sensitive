@@ -70,7 +70,7 @@ jobs:
       - name: Run test suite
         run: |
           if [[ ${{ matrix.php-version }} == '8.1' ]]; then
-            ./vendor/bin/pest --coverage --min=90 --coverage-clover=coverage.xml
+            composer coverage --min=90 --coverage-clover=coverage.xml
           else
-            ./vendor/bin/pest
+            composer pest
           fi

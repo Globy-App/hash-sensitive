@@ -50,6 +50,12 @@
         ],
         "psalm": [
             "php ./vendor/bin/psalm"
+        ],
+        "pest": [
+            "php ./vendor/bin/pest"
+        ],
+        "coverage": [
+            "php ./vendor/bin/pest --coverage"
         ]
     },
     "config": {
