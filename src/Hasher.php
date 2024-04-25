@@ -138,7 +138,7 @@ class Hasher
     /**
      * Traverse an object and replace all values to be redacted with a hashed version of the value
      *
-     * @param object $object        Object to redact values from
+     * @param object $object            Object to redact values from
      * @param array<array-key, mixed>  $sensitiveKeys Keys for which to hash the value
      *
      * @return object The object with redacted values hashed
