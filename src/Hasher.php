@@ -146,6 +146,11 @@ class Hasher
     protected function traverseObject(object $object, array $sensitiveKeys): object
     {
         foreach (get_object_vars($object) as $key => $value) {
+            if ($value === null) {
+                // Nothing to hash or process
+                continue;
+            }
+
             // If the value is not an array or an object, hash it if it is a sensitive key
             if (is_scalar($value)) {
                 if (in_array($key, $sensitiveKeys) || array_key_exists($key, $sensitiveKeys)) {
