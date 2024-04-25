@@ -10,6 +10,7 @@ use UnexpectedValueException;
 
 /**
  * The processor to be added to your Monolog instance.
+ * @api
  * @package GlobyApp\HashSensitive
  */
 class HashSensitiveProcessor extends Hasher implements ProcessorInterface

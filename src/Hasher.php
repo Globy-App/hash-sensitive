@@ -7,6 +7,7 @@ use UnexpectedValueException;
 /**
  * Class to manage scrubbing the keys from an array
  *
+ * @api
  * @author sjustein
  */
 class Hasher
@@ -61,7 +62,6 @@ class Hasher
     /**
      * Function to handle traversing arrays and objects
      *
-     * @param string       $key           The key being processed
      * @param array<array-key, mixed>|object $value         The value of the key in the input data
      * @param array<array-key, mixed>        $sensitiveKeys The list of keys to hash
      *
@@ -69,7 +69,7 @@ class Hasher
      *
      * @return array<array-key, mixed>|object The processed array or object
      */
-    protected function traverse(string $key, array|object $value, array $sensitiveKeys): array|object
+    protected function traverse(array|object $value, array $sensitiveKeys): array|object
     {
         if (is_array($value)) {
             return $this->traverseInputArray($value, $sensitiveKeys);
@@ -116,12 +116,12 @@ class Hasher
                 }
 
                 /* @phpstan-ignore-next-line The above if statement asserts that $sensitiveKeys[$key] is a subtree */
-                $inputArray[$key] = $this->traverse($key, $value, $sensitiveKeys[$key]);
+                $inputArray[$key] = $this->traverse($value, $sensitiveKeys[$key]);
 
                 // ExclusiveSubtree turned off means that sub keys should be checked according to ALL keys, not just
                 // the keys in their sensitive keys subtree
                 if (!$this->exclusiveSubtree) {
-                    $inputArray[$key] = $this->traverse($key, $inputArray[$key], $sensitiveKeys);
+                    $inputArray[$key] = $this->traverse($inputArray[$key], $sensitiveKeys);
                 }
 
                 continue;
@@ -129,7 +129,7 @@ class Hasher
 
             // The current key is not a sensitive key, traverse the subtree in search of sensitive keys with the same level in sensitiveKeys
             /* @phpstan-ignore-next-line is_scalar above this if block asserts that $value is not a scalar */
-            $inputArray[$key] = $this->traverse($key, $value, $sensitiveKeys);
+            $inputArray[$key] = $this->traverse($value, $sensitiveKeys);
         }
 
         return $inputArray;
@@ -168,12 +168,12 @@ class Hasher
                 }
 
                 /* @phpstan-ignore-next-line The above if statement asserts that $sensitiveKeys[$key] is a subtree */
-                $object->{$key} = $this->traverse($key, $value, $sensitiveKeys[$key]);
+                $object->{$key} = $this->traverse($value, $sensitiveKeys[$key]);
 
                 // ExclusiveSubtree turned off means that sub keys should be checked according to ALL keys, not just
                 // the keys in their sensitive keys sub-object
                 if (!$this->exclusiveSubtree) {
-                    $object->{$key} = $this->traverse($key, $object->{$key}, $sensitiveKeys);
+                    $object->{$key} = $this->traverse($object->{$key}, $sensitiveKeys);
                 }
 
                 continue;
@@ -181,7 +181,7 @@ class Hasher
 
             // The current key is not a sensitive key, traverse the sub-object in search of sensitive keys with the same level in sensitiveKeys
             /* @phpstan-ignore-next-line is_scalar above this if block asserts that $value is not a scalar */
-            $object->{$key} = $this->traverse($key, $value, $sensitiveKeys);
+            $object->{$key} = $this->traverse($value, $sensitiveKeys);
         }
 
         return $object;
