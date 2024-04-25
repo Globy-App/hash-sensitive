@@ -1,4 +1,4 @@
-# Hash Sensitive [![CI](https://github.com/Sjustein/hash-sensitive/actions/workflows/ci.yml/badge.svg)](https://github.com/Sjustein/hash-sensitive/actions/workflows/ci.yml)
+# Hash Sensitive [![CI](https://github.com/Globy-App/hash-sensitive/actions/workflows/ci.yml/badge.svg)](https://github.com/Globy-App/hash-sensitive/actions/workflows/ci.yml)
 
 🙈 A Monolog processor that protects sensitive data from miss logging. Forked from: [redact-sensitive](https://github.com/leocavalcante/redact-sensitive) by [Leo Cavalcante](https://github.com/leocavalcante).
 When redacting values from logs, it might be useful to be able to compare redacted values that are equal.
@@ -10,7 +10,7 @@ Readme.INFO: Hello, World! {"api_key":"3f6b5eb5b4bc422fc119c76caccd8792d1cf253a7
 
 ## Install
 ```shell
-composer require sjustein/hash-sensitive
+composer require globyapp/hash-sensitive
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ Will hash the value of the `api_key`.
 You can now create a new Processor with the given keys:
 
 ```php
-use HashSensitive\HashSensitiveProcessor;
+use GlobyApp\HashSensitive\HashSensitiveProcessor;
 
 $sensitive_keys = ['api_key'];
 
@@ -38,7 +38,7 @@ $processor = new HashSensitiveProcessor($sensitive_keys);
 ### 3. Set the Processor to a Monolog\Logger
 
 ```php
-use HashSensitive\HashSensitiveProcessor;
+use GlobyApp\HashSensitive\HashSensitiveProcessor;
 
 $sensitive_keys = ['api_key'];
 
@@ -52,7 +52,7 @@ $logger->pushProcessor($processor);
 
 ```php
 use Monolog\Handler\StreamHandler;
-use HashSensitive\HashSensitiveProcessor;
+use GlobyApp\HashSensitive\HashSensitiveProcessor;
 
 $sensitive_keys = ['api_key'];
 
@@ -78,7 +78,7 @@ Use `algorithm` to specify the algorithm used for hashing the value. Refer to [t
 
 ```php
 use Monolog\Handler\StreamHandler;
-use HashSensitive\HashSensitiveProcessor;
+use GlobyApp\HashSensitive\HashSensitiveProcessor;
 
 $sensitive_keys = ['access_token'];
 
@@ -105,7 +105,7 @@ When set to false, every key in the input data is checked against every key in s
 
 ```php
 use Monolog\Handler\StreamHandler;
-use HashSensitive\HashSensitiveProcessor;
+use GlobyApp\HashSensitive\HashSensitiveProcessor;
 
 $sensitive_keys = [
     'test',
