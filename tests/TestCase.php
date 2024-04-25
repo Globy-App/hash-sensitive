@@ -14,6 +14,31 @@ use Stringable;
 
 abstract class TestCase extends BaseTestCase
 {
+    protected TestDataEntity $simpleExample;
+    protected TestDataEntity $nestedExample;
+    protected TestDataEntity $nestedRedaction;
+    protected TestDataEntity $nestedNoHash;
+    protected TestDataEntity $nestedNull;
+    protected TestDataEntity $nestedSensitiveNull;
+    protected TestDataEntity $insideNested;
+    protected TestDataEntity $exclusiveSubtree;
+    protected TestDataEntity $optionalKeyExample;
+
+    public function __construct(string $name)
+    {
+        $this->simpleExample = new TestDataEntity(['test' => 'foobar'], ['test']);
+        $this->nestedExample = new TestDataEntity(['test' => ['foobar' => 'test']], ['test']);
+        $this->nestedRedaction = new TestDataEntity(['test' => ['nested' => 'foobar']], ['test' => ['nested']]);
+        $this->nestedNoHash = new TestDataEntity(['test' => ['nested' => 'foobar', 'no_hash' => 'foobar']], ['test' => ['nested']]);
+        $this->nestedNull = new TestDataEntity(['test' => ['nested' => null, 'no_hash' => null, null]], ['test' => ['nested']]);
+        $this->nestedSensitiveNull = new TestDataEntity(['test' => ['nested' => null, 'no_hash' => null, null]], ['test' => [null], null]);
+        $this->insideNested = new TestDataEntity(['test' => ['nested' => 'foobar']], ['nested']);
+        $this->exclusiveSubtree = new TestDataEntity(['test_key' => 'test_value', 'test_subkey' => ['to_hash' => 'test_value', 'test' => 'test']], ['test', 'test_subkey' => ['to_hash']]);
+        $this->optionalKeyExample = new TestDataEntity(['test' => 'foobar', 'optionalKey' => ''], ['test', 'optionalKey']);
+
+        parent::__construct($name);
+    }
+
     /**
      * @param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $level
      * @param string|Stringable $message

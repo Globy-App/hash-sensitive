@@ -138,7 +138,7 @@ class Hasher
     /**
      * Traverse an object and replace all values to be redacted with a hashed version of the value
      *
-     * @param object $object        Object to redact values from
+     * @param object $object            Object to redact values from
      * @param array<array-key, mixed>  $sensitiveKeys Keys for which to hash the value
      *
      * @return object The object with redacted values hashed
@@ -146,6 +146,11 @@ class Hasher
     protected function traverseObject(object $object, array $sensitiveKeys): object
     {
         foreach (get_object_vars($object) as $key => $value) {
+            if ($value === null) {
+                // Nothing to hash or process
+                continue;
+            }
+
             // If the value is not an array or an object, hash it if it is a sensitive key
             if (is_scalar($value)) {
                 if (in_array($key, $sensitiveKeys) || array_key_exists($key, $sensitiveKeys)) {
