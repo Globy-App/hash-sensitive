@@ -1,4 +1,4 @@
-name: CI
+name: CQ
 
 on:
   push:
@@ -8,8 +8,12 @@ on:
     branches:
       - '*'
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  code-quality:
+    name: Coding standards, code quality and static code analysis
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,22 +28,52 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-version }}
+        coverage: xdebug
         extensions: dom
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: Run test suite
-      run: vendor/bin/pest
+    - name: Run the linter
+      run: composer lint
+
+    - name: Run PHPStan
+      if: success() || failure()
+      run: composer phpstan -- --error-format=github > phpstan.json
+
+    - name: Run psalm
+      if: success() || failure()
+      run: composer psalm --output-format=github
+
+  integration-tests:
+    name: Test suite and coverage
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.1', '8.2', '8.3']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: xdebug
+          extensions: dom
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run test suite
+        run: |
+          if [[ ${{ matrix.php-version }} == '8.1' ]]; then
+            composer coverage --min=90 --coverage-clover=coverage.xml
+          else
+            composer pest
+          fi

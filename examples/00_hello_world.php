@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Monolog\Handler\StreamHandler;
-use HashSensitive\HashSensitiveProcessor;
+use GlobyApp\HashSensitive\HashSensitiveProcessor;
 use Monolog\Logger;
 
 $sensitive_keys = ['api_key'];
