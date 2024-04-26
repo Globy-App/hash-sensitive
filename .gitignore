@@ -23,4 +23,7 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+
 /infection-log.json
+logs/
+/coverage.xml
