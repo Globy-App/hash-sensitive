@@ -77,3 +77,9 @@ jobs:
           else
             composer pest
           fi
+
+      - name: Run infection mutation testing
+        if: success() || failure()
+        run:
+          composer infection --min-msi=90 --min-covered-msi=95 --threads=4
+
