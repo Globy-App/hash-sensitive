@@ -1,6 +1,23 @@
-# Hash Sensitive [![CI](https://github.com/Globy-App/hash-sensitive/actions/workflows/ci.yml/badge.svg)](https://github.com/Globy-App/hash-sensitive/actions/workflows/ci.yml)
+# Hash Sensitive
 
-🙈 A Monolog processor that protects sensitive data from miss logging. Forked from: [redact-sensitive](https://github.com/leocavalcante/redact-sensitive) by [Leo Cavalcante](https://github.com/leocavalcante).
+Monolog processor to protect sensitive information from logging by hashing the values.
+
+[![Packagist Version](https://img.shields.io/packagist/v/globyapp/hash-sensitive)](https://packagist.org/packages/globyapp/hash-sensitive) [![Packagist](https://img.shields.io/packagist/l/globyapp/hash-sensitive)](https://github.com/globyapp/hash-sensitive/blob/master/LICENSE) [![PHP from Packagist](https://img.shields.io/packagist/php-v/globyapp/hash-sensitive)](https://github.com/globyapp/hash-sensitive/blob/master/composer.json#L14) [![CI](https://github.com/Globy-App/hash-sensitive/actions/workflows/ci.yml/badge.svg)](https://github.com/Globy-App/hash-sensitive/actions/workflows/ci.yml)
+
+## Summary
+
+- [About](#about)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Examples](#examples)
+- [API](#api)
+- [Known issues](#known-issues)
+- [Thanks](#thanks)
+
+## About
+
+A Monolog processor that protects sensitive data from miss logging. Forked from: [redact-sensitive](https://github.com/leocavalcante/redact-sensitive) by [Leo Cavalcante](https://github.com/leocavalcante).
 When redacting values from logs, it might be useful to be able to compare redacted values that are equal.
 
 Avoids logging something like `{"api_key":"mysupersecretapikey"}` by substituting the value by a hashed version of the value:
@@ -8,14 +25,29 @@ Avoids logging something like `{"api_key":"mysupersecretapikey"}` by substitutin
 Readme.INFO: Hello, World! {"api_key":"3f6b5eb5b4bc422fc119c76caccd8792d1cf253a71a04d520206a01f1463ca41"} []
 ```
 
-## Install
-```shell
+## Features
+
+- Adds a monolog processor to hash pre-determined array keys.
+- Hashes sensitive data in the monolog context to prevent sending secrets to the logs.
+- The hashed version is deterministic and thus allows for correlation between errors.
+
+## Requirements
+
+- PHP >= 8.1.0
+- [Composer](https://getcomposer.org/)
+- Monolog >= 3.0
+
+## Installation
+
+Add the package to your dependencies:
+
+```bash
 composer require globyapp/hash-sensitive
 ```
 
-## Usage
+### Usage
 
-### 1. Prepare your sensitive keys
+#### 1. Prepare your sensitive keys
 
 It is an array of key names, for example:
 ```php
@@ -23,7 +55,7 @@ $sensitive_keys = ['api_key'];
 ```
 Will hash the value of the `api_key`.
 
-### 2. Create a Processor using the keys
+#### 2. Create a Processor using the keys
 
 You can now create a new Processor with the given keys:
 
@@ -35,7 +67,7 @@ $sensitive_keys = ['api_key'];
 $processor = new HashSensitiveProcessor($sensitive_keys);
 ```
 
-### 3. Set the Processor to a Monolog\Logger
+#### 3. Set the Processor to a Monolog\Logger
 
 ```php
 use GlobyApp\HashSensitive\HashSensitiveProcessor;
@@ -67,10 +99,16 @@ $logger->info('Hello, World!', ['api_key' => 'mysupersecretapikey']);
 Readme.INFO: Hello, World! {"api_key":"3f6b5eb5b4bc422fc119c76caccd8792d1cf253a71a04d520206a01f1463ca41"} []
 ```
 
-### Custom format
+### Using the library standalone
+
+It is possible to use the logic in the library without using it as a monolog hook. This can be achieved by constructing a new instance of the `Hasher` class.
+function `scrubKeys`, an array of values to scrub and the sensitive key array can be specified in the same manner as when using the library with monolog.
+
+### I don't want my output to be hashed, just replaced with a pre-determined string
 If you're looking for formating the output with a user defined string, this isn't the right project.
 You might want to look into [redact-sensitive](https://github.com/leocavalcante/redact-sensitive).
 
+## API
 ### Length limit & algorithm
 
 Use `lengthLimit` to truncate redacted sensitive information, such as lengthy tokens. Truncation always happens before hashing.
@@ -136,9 +174,9 @@ Example.INFO: Nested {"test_key":"test_value","test_subkey":{"to_hash":"4f7f6a4a
 Example.INFO: Nested {"test_key":"test_value","test_subkey":{"to_hash":"4f7f6a4ae46676d9751fdccdf15ae1e6a200ed0de5653e06390148928c642006","test":"9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"}} []
 ```
 
-## Using the library standalone
-It is possible to use the logic in the library without using it as a monolog hook. This can be achieved by constructing a new instance of the `Hasher` class.
-function `scrubKeys`, an array of values to scrub and the sensitive key array can be specified in the same manner as when using the library with monolog.
+## Known issues
+
+Currently, there are no known issues.
 
 ## Thanks
 Feel free to open any issues or PRs.
