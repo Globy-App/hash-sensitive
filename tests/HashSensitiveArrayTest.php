@@ -83,3 +83,21 @@ it('redacts inside nested arrays', function (): void {
     $record = $this->getRecord(context: $this->insideNested->getInput());
     expect($processor($record)->context)->toBe(['test' => ['nested' => 'c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2']]);
 });
+
+# Prevent bugs from re-appearing
+# Issue: https://github.com/Globy-App/hash-sensitive/issues/10
+it('does not hash values of integer keys', function (): void {
+    $integerKeys = new TestDataEntity([0 => 'foo', 1 => 'bar'], ['other', 'first', 'second']);
+    $processor = new HashSensitiveProcessor($integerKeys->getSensitiveKeys());
+
+    $record = $this->getRecord(context: $integerKeys->getInput());
+    expect($processor($record)->context)->toBe(['test' => [0 => 'foo', 1 => 'bar']]);
+});
+
+it('does not throw an exception', function (): void {
+    $integerKeys = new TestDataEntity([0 => ['id' => 1, 'value' => 'foo'], 1 => ['id' => 2, 'value' => 'bar']], ['other', 'first', 'second']);
+    $processor = new HashSensitiveProcessor($integerKeys->getSensitiveKeys());
+
+    $record = $this->getRecord(context: $integerKeys->getInput());
+    expect($processor($record)->context)->toBe(['test' => [0 => ['id' => 1, 'value' => 'foo'], 1 => ['id' => 2, 'value' => 'bar']]]);
+});
