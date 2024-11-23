@@ -172,7 +172,7 @@ it('preserves empty values in objects', function (): void {
 
 # Prevent bugs from re-appearing
 # Issue: https://github.com/Globy-App/hash-sensitive/issues/
-it('does not throw an exception', function (): void {
+it('10 - does not throw an exception', function (): void {
     $nested1 = new \stdClass();
     $nested1->id = 1;
     $nested1->value = 'foo';

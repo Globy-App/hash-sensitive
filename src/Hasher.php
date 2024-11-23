@@ -96,7 +96,7 @@ class Hasher
 
             // If the value is not an array or an object, hash it if it is a sensitive key
             if (is_scalar($value)) {
-                if (in_array($key, $sensitiveKeys) || array_key_exists($key, $sensitiveKeys)) {
+                if ($this->isSensitiveKey($key, $sensitiveKeys)) {
                     $inputArray[$key] = $this->hash(print_r($value, true));
                 }
 
@@ -105,7 +105,7 @@ class Hasher
 
             // The value is either an array or an object, let traverse handle the specifics
             // If the current key is a sensitive key, traverse the subtree.
-            if ((in_array($key, $sensitiveKeys) || array_key_exists($key, $sensitiveKeys))) {
+            if ($this->isSensitiveKey($key, $sensitiveKeys)) {
                 // If the current key doesn't have a subtree of sensitive keys (indicating the entire subtree,
                 //  and not a value somewhere in the subtree should be hashed)
                 if (!array_key_exists($key, $sensitiveKeys)) {
@@ -190,5 +190,32 @@ class Hasher
         }
 
         return $object;
+    }
+
+    /**
+     * @param int|string $key
+     *
+     * @param array<array-key, mixed> $sensitiveKeys Keys to redact
+     *
+     * @return bool Whether the key provided is a sensitiveKey
+     */
+    protected function isSensitiveKey(int|string $key, array $sensitiveKeys): bool
+    {
+        // Checks the values, if the key is in the value list of sensitive keys (the 'end' of the sensitive key lists)
+        if (in_array($key, $sensitiveKeys)) {
+            return true;
+        }
+
+        // When there is a sub array, check whether the key is in the sensitive key key list
+        if (array_key_exists($key, $sensitiveKeys)) {
+            if (is_int($key)) {
+                // If the key is an integer, this is php generated key, when sensitiveKeys should be a value list
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
