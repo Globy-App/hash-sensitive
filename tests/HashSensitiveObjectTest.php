@@ -169,3 +169,22 @@ it('preserves empty values in objects', function (): void {
         ->and($nested->test)->toBe('c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2')
         ->and($nested->optionalKey)->toBeNull();
 });
+
+# Prevent bugs from re-appearing
+# Issue: https://github.com/Globy-App/hash-sensitive/issues/
+it('10 - does not throw an exception', function (): void {
+    $nested1 = new \stdClass();
+    $nested1->id = 1;
+    $nested1->value = 'foo';
+
+    $nested2 = new \stdClass();
+    $nested2->id = 2;
+    $nested2->value = 'bar';
+
+    $input = [0 => $nested1, 1 => $nested2];
+    $sensitive_keys = ['other', 'first', 'second'];
+    $processor = new HashSensitiveProcessor($sensitive_keys);
+
+    $record = $this->getRecord(context: $input);
+    expect($processor($record)->context)->toBe([0 => $nested1, 1 => $nested2]);
+});

@@ -53,7 +53,9 @@ It is an array of key names, for example:
 ```php
 $sensitive_keys = ['api_key'];
 ```
-Will hash the value of the `api_key`.
+Will hash the value of the `api_key`. Because of PHP's tendency to automatically add integer indexes to such an array,
+integers in sensitive keys will be ignored and might lead to unexpected results. To be on the safe side, only use
+sensitive string keys, or a nested tree of strings.
 
 #### 2. Create a Processor using the keys
 
