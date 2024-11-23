@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HashSensitiveTests;
 
 use GlobyApp\HashSensitive\HashSensitiveProcessor;
-use TypeError;
 
 it('redacts records contexts', function (): void {
     $processor = new HashSensitiveProcessor($this->simpleExample->getSensitiveKeys());

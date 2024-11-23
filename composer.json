@@ -5,17 +5,21 @@
     "license": "MIT",
     "authors": [
         {
+            "name": "Justin Ruiter",
+            "email": "globy@justinruiter.nl"
+        },
+        {
             "name": "sjustein",
             "email": "hashsensitive@justinruiter.nl"
         },
         {
-            "name": "Justin Ruiter",
-            "email": "globy@justinruiter.nl"
+            "name": "leocavalcante",
+            "email": "lc@leocavalcante.com"
         }
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "monolog/monolog": "^3.0"
     },
     "autoload": {
@@ -24,11 +28,12 @@
         }
     },
     "require-dev": {
-        "pestphp/pest": "^2.4",
+        "pestphp/pest": "v2.31.0",
         "friendsofphp/php-cs-fixer": "^3.16",
         "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-deprecation-rules": "^1.1",
-        "vimeo/psalm": "^5.23"
+        "vimeo/psalm": "^5.23",
+        "infection/infection": "^0.27.11"
     },
     "autoload-dev": {
         "psr-4": {
@@ -56,11 +61,15 @@
         ],
         "coverage": [
             "php ./vendor/bin/pest --coverage"
+        ],
+        "infection": [
+            "php ./vendor/bin/infection"
         ]
     },
     "config": {
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "infection/extension-installer": true
         }
     }
 }
