@@ -28,7 +28,7 @@
         }
     },
     "require-dev": {
-        "pestphp/pest": "^v2.34.7",
+        "pestphp/pest": "v2.31.0",
         "friendsofphp/php-cs-fixer": "^3.16",
         "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-deprecation-rules": "^1.1",
