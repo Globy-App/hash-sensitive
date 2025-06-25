@@ -33,7 +33,7 @@
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-deprecation-rules": "^2",
         "vimeo/psalm": "^6",
-        "infection/infection": "^0.29.9"
+        "infection/infection": "^0.29.0"
     },
     "autoload-dev": {
         "psr-4": {
