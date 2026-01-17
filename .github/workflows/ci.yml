@@ -80,6 +80,6 @@ jobs:
 
       - name: Run infection mutation testing
         run:
-          php ./vendor/bin/infection --min-msi=90 --min-covered-msi=95 --threads=max --no-interaction --logger-github=true --skip-initial-tests --coverage=logs
+          php ./vendor/bin/pest --coverage --mutate --parallel --min=90
 
 
