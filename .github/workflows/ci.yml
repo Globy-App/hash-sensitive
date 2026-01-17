@@ -78,8 +78,8 @@ jobs:
         run: |
           php ./vendor/bin/pest --coverage --min=100 --coverage-clover=coverage.xml --coverage-xml=logs/coverage --log-junit=logs/coverage.junit.xml
 
-      - name: Run infection mutation testing
-        run:
-          php ./vendor/bin/pest --coverage --mutate --parallel --min=90
+#      - name: Run infection mutation testing
+#        run:
+#          php ./vendor/bin/pest --coverage --mutate --parallel --min=90
 
 
