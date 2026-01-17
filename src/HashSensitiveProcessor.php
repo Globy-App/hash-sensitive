@@ -40,6 +40,7 @@ class HashSensitiveProcessor extends Hasher implements ProcessorInterface
      *
      * @return LogRecord Log record with redacted values hashed.
      */
+    #[\Override]
     public function __invoke(LogRecord $record): LogRecord
     {
         $redactedContext = $this->traverseInputArray($record->context, $this->sensitiveKeys);

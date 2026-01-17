@@ -19,7 +19,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.4",
         "monolog/monolog": "^3.0"
     },
     "autoload": {
@@ -28,12 +28,12 @@
         }
     },
     "require-dev": {
-        "pestphp/pest": "v2.31.0",
+        "pestphp/pest": "v3.4.0",
         "friendsofphp/php-cs-fixer": "^3.16",
-        "phpstan/phpstan": "^1.10",
-        "phpstan/phpstan-deprecation-rules": "^1.1",
-        "vimeo/psalm": "^5.23",
-        "infection/infection": "^0.27.11"
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2",
+        "vimeo/psalm": "^6",
+        "infection/infection": "^0.29.0"
     },
     "autoload-dev": {
         "psr-4": {

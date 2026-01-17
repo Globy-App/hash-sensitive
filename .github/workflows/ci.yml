@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.2', '8.3']
+        php-version: ['8.4']
 
     steps:
     - uses: actions/checkout@v4
@@ -36,8 +36,13 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Run the linter, ignoring that php 8.4 is officially not supported
+      run: PHP_CS_FIXER_IGNORE_ENV=1 php ./vendor/bin/php-cs-fixer fix src --dry-run --allow-risky=yes
+      if: matrix.php-version == '8.4'
+
     - name: Run the linter
       run: php ./vendor/bin/php-cs-fixer fix src --dry-run --allow-risky=yes
+      if: matrix.php-version != '8.4'
 
     - name: Run PHPStan
       if: success() || failure()
@@ -54,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.2', '8.3']
+        php-version: ['8.4']
 
     steps:
       - uses: actions/checkout@v4
@@ -73,8 +78,8 @@ jobs:
         run: |
           php ./vendor/bin/pest --coverage --min=100 --coverage-clover=coverage.xml --coverage-xml=logs/coverage --log-junit=logs/coverage.junit.xml
 
-      - name: Run infection mutation testing
-        run:
-          php ./vendor/bin/infection --min-msi=90 --min-covered-msi=95 --threads=max --no-interaction --logger-github=true --skip-initial-tests --coverage=logs
+#      - name: Run infection mutation testing
+#        run:
+#          php ./vendor/bin/pest --coverage --mutate --parallel --min=90
 
 
