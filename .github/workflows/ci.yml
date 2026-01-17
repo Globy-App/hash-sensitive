@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.2', '8.3', '8.4']
+        php-version: ['8.4', '8.5']
 
     steps:
     - uses: actions/checkout@v4
@@ -59,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.2', '8.3', '8.4']
+        php-version: ['8.4', '8.5']
 
     steps:
       - uses: actions/checkout@v4
@@ -80,6 +80,6 @@ jobs:
 
       - name: Run infection mutation testing
         run:
-          php ./vendor/bin/pest --coverage --mutate --parallel --min=90
+          php ./vendor/bin/infection --min-msi=90 --min-covered-msi=95 --threads=max --no-interaction --logger-github=true --skip-initial-tests --coverage=logs
 
 

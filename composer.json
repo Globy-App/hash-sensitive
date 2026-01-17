@@ -19,7 +19,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.4",
         "monolog/monolog": "^3.0"
     },
     "autoload": {
